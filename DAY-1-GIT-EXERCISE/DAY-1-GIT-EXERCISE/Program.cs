@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
+
 
 namespace DAY_1_GIT_EXERCISE
 {
@@ -10,6 +12,45 @@ namespace DAY_1_GIT_EXERCISE
     {
         static void Main(string[] args)
         {
+            string connectionString = "Server=localhost; Port=3306; Database=school_db; Uid=root; Pwd=BANKAI123";
+
+            MySqlConnection con = new MySqlConnection(connectionString);
+
+            try
+            {
+                con.Open();
+                Console.WriteLine("Connection Opened Successfully!");
+
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM student", con);
+
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Console.WriteLine("ID: " + reader["id"] +
+                          " | Name: " + reader["name"] +
+                          " | Age: " + reader["age"] +
+                          " | Enrollment Date: " + reader["enrollment_date"] +
+                          " | Course ID: " + reader["course_id"]);
+                }
+
+                reader.Close();
+            }
+            catch(MySqlException ex)
+            {
+                Console.WriteLine("Database Erro: " + ex.Message);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("General error: " + ex.Message);
+            }
+
+            finally
+            {
+                con.Close();
+                Console.WriteLine("Connection Closed!");
+            }
         }
     }
+    
 }
