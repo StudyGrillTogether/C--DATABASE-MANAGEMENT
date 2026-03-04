@@ -12,7 +12,7 @@ namespace DAY_1_GIT_EXERCISE
     {
         static void Main(string[] args)
         {
-            string connectionString = "Server=localhost; Port=3306; Database=school_db; Uid=root; Pwd=BANKAI123";
+            string connectionString = "Data Source=localhost; Port=3306; Initial Catalog=school_db; Uid=root; Pwd=BANKAI123";
 
             MySqlConnection con = new MySqlConnection(connectionString);
 
