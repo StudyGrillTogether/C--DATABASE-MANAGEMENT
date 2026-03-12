@@ -49,6 +49,41 @@ namespace DAY_4_PRACTICE
             {
                 Console.WriteLine($"{student.Name}-{student.Age}");
             }
+            Console.WriteLine("=====SOrting by name======");
+            var byName=students.OrderBy(s=>s.Name);
+            foreach(var  s in byName)
+            {
+                Console.WriteLine($"{s.Name}");    
+            }
+            Console.WriteLine("=====Chaning with where======");
+            var result = students
+                .Where(s => s.Age > 18)
+                .OrderBy(s => s.Name);
+            foreach (var s in result)
+            {
+                Console.WriteLine($"{s.Name} - {s.Age}");
+            }
+
+            Console.WriteLine("=====using first or default======");
+            var firstMath = students.FirstOrDefault(s => s.Course == "Math");
+            Console.WriteLine(firstMath.Name);
+            Console.WriteLine("=====using first or default======");
+            var youngest = students.OrderBy(s => s.Age).FirstOrDefault();
+            Console.WriteLine(youngest.Name+"is the first when ordered by age");
+            Console.WriteLine("=====using first or default like above but in descending age======");
+            var oldest=students.OrderByDescending(s=>s.Age).FirstOrDefault();
+            Console.WriteLine($"the oldest is {oldest.Name} of age {oldest.Age}");
+
+            var age99 = students.FirstOrDefault(s => s.Age == 99);
+            if (age99 != null)
+            {
+                Console.WriteLine (age99.Name);
+            }
+            else
+            {
+                Console.WriteLine ("No such student with the age found");
+            }
+
         }
     }
 
