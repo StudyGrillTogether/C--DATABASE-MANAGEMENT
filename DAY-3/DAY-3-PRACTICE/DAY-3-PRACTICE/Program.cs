@@ -92,16 +92,20 @@ namespace DAY_3_PRACTICE
                 Console.WriteLine("General Error: " + ex.Message);
             }
         }
+        static void ShowMenu()
+        {
+            Console.WriteLine("\n===== Student Menu =====");
+            Console.WriteLine("1. Add Student");
+            Console.WriteLine("2. Delete Student");
+            Console.WriteLine("3. Exit");
+            Console.Write("Choose an option: ");
+        }
         static void Main(string[] args)
         {
 
             while (true)
             {
-                Console.WriteLine("\n===== Student Menu =====");
-                Console.WriteLine("1. Add Student");
-                Console.WriteLine("2. Delete Student");
-                Console.WriteLine("3. Exit");
-                Console.Write("Choose an option: ");
+                ShowMenu();
 
                 string choice = Console.ReadLine();
 
