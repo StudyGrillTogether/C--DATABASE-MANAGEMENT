@@ -16,13 +16,21 @@ namespace DAY_3_PRACTICE
             string name=Console.ReadLine();
 
             Console.WriteLine("Enter age: ");
-            int age=int.Parse(Console.ReadLine());
+            if(!int.TryParse(Console.ReadLine(),out int age))
+            {
+                Console.WriteLine("INVALID AGE:");
+                return;
+            }
 
             Console.WriteLine("Enter Enrollment Date (YYYY-MM-DD): ");
             string date=Console.ReadLine();
 
             Console.WriteLine("Enter Course ID: ");
-            int courseId=int.Parse(Console.ReadLine());
+            if(!int.TryParse(Console.ReadLine(),out int courseId))
+            {
+                Console.WriteLine("Invalid Course Id");
+                return;
+            }
 
             try
             {
@@ -60,7 +68,11 @@ namespace DAY_3_PRACTICE
         {
             
             Console.Write("Enter Student ID to delete: ");
-            int deleteId = int.Parse(Console.ReadLine());
+            if(!int.TryParse(Console.ReadLine(), out int deleteId))
+            {
+                Console.WriteLine("Invalid ID");
+                return;
+            }
             try
             {
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -92,12 +104,116 @@ namespace DAY_3_PRACTICE
                 Console.WriteLine("General Error: " + ex.Message);
             }
         }
+        static void ViewStudents()
+        {
+            Console.WriteLine("\n=======Viewing Students========");
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "SELECT * FROM student";
+                    using(MySqlCommand cmd=new MySqlCommand(query, connection))
+                    {
+                        using(MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Console.WriteLine("ID: " + reader["id"] +
+                            " | Name: " + reader["name"] +
+                            " | Age: " + reader["age"] +
+                            " | Enrollment Date: " + reader["enrollment_date"] +
+                            " | Course ID: " + reader["course_id"]);
+                            }
+                        }
+                        
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Database Error: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("General Error: " + ex.Message);
+            }
+        }
+
+        static void UpdateStudent()
+        {
+            Console.WriteLine("Enter Student Id TO Update:");
+            if(!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine("Invalid ID! please enter a number: ");
+                return;
+            }
+
+            Console.Write("Enter New Name: ");
+            string name = Console.ReadLine();
+
+            Console.Write("Enter your new age: ");
+            if(!int.TryParse(Console.ReadLine(),out int age))
+            {
+                Console.WriteLine("invalid age! Please enter a number");
+                return;
+            }
+            Console.Write("Enter New Enrollment Date (YYYY-MM-DD)");
+            string date= Console.ReadLine();
+
+            Console.Write("Enter New Course ID: ");
+            if (!int.TryParse(Console.ReadLine(), out int courseID))
+            {
+                Console.WriteLine("Invalid Course ID! Please Enter a Number ");
+                return;
+            }
+
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "UPDATE student SET name=@name,age=@age,enrollment_date=@date,course_id=@courseID WHERE id=@id";
+                    using(MySqlCommand cmd=new MySqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@name", name);
+                        cmd.Parameters.AddWithValue("@age", age);
+                        cmd.Parameters.AddWithValue("@date", date);
+                        cmd.Parameters.AddWithValue("@courseID", courseID);
+                        cmd.Parameters.AddWithValue("@id", id);
+
+                        int rowsaffected = cmd.ExecuteNonQuery();
+                        if (rowsaffected > 0)
+                        {
+                            Console.WriteLine("\n" + rowsaffected + " row(s) updated successfully!");
+                            Console.WriteLine("Name: " + name + " | Age: " + age + " | Course ID: " + courseID);
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nNo student found with ID: " + id);
+                        }
+                            
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Database Error: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("General Error: " + ex.Message);
+            }
+
+        }
         static void ShowMenu()
         {
             Console.WriteLine("\n===== Student Menu =====");
             Console.WriteLine("1. Add Student");
-            Console.WriteLine("2. Delete Student");
-            Console.WriteLine("3. Exit");
+            Console.WriteLine("2. View Students");
+            Console.WriteLine("3. Update Student");
+            Console.WriteLine("4. Delete Student");
+            Console.WriteLine("5. Exit");
             Console.Write("Choose an option: ");
         }
         static void Main(string[] args)
@@ -117,11 +233,18 @@ namespace DAY_3_PRACTICE
                         break;
                     case "2":
                         
-                        DeleteStudent();
+                        ViewStudents();
                         break;
                     case "3":
-                        Console.WriteLine("Goodbye!");
+                        UpdateStudent();
+                        break;
+                     case "4":
+                        DeleteStudent();
+                        break;
+                    case "5":
+                        Console.WriteLine("GOODBYE");
                         return;
+
                     default:
                         Console.WriteLine("Invalid option! Try again.");
                         break;
