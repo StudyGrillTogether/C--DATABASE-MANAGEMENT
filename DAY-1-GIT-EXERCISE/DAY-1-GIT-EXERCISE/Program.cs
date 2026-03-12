@@ -27,13 +27,9 @@ namespace DAY_1_GIT_EXERCISE
 
                 while (reader.Read())
                 {
-                    Console.WriteLine("ID: " + reader["id"] +
-                          " | Name: " + reader["name"] +
-                          " | Age: " + reader["age"] +
-                          " | Enrollment Date: " + reader["enrollment_date"] +
-                          " | Course ID: " + reader["course_id"]);
-                }
+                    Console.WriteLine("ID: " + reader["id"]);
 
+                }
                 reader.Close();
             }
             catch(MySqlException ex)

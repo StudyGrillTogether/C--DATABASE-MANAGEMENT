@@ -11,14 +11,14 @@ namespace DAY_3_PRACTICE
         static string connectionString = "Server=localhost; Port=3306; Database=school_db; Uid=root; Pwd=BANKAI123";
         static void AddStudent()
         {
-            Console.WriteLine("Add Student Selected");
+            
             Console.WriteLine("Enter Name: ");
             string name=Console.ReadLine();
 
             Console.WriteLine("Enter age: ");
             int age=int.Parse(Console.ReadLine());
 
-            Console.WriteLine("Enter Enrollment Date:");
+            Console.WriteLine("Enter Enrollment Date (YYYY-MM-DD): ");
             string date=Console.ReadLine();
 
             Console.WriteLine("Enter Course ID: ");
@@ -39,6 +39,9 @@ namespace DAY_3_PRACTICE
 
                         int rowsAffected = cmd.ExecuteNonQuery();
                         Console.WriteLine("\n" + rowsAffected + " row(s) inserted successfully!");
+
+                        Console.WriteLine("\nStudent Details Entered:");
+                        Console.WriteLine("Name: " + name + " | Age: " + age + " | Date: " + date + " | Course ID: " + courseId);
                     }
                 }
             }
@@ -50,8 +53,44 @@ namespace DAY_3_PRACTICE
             {
                 Console.WriteLine("General Error: " + ex.Message);
             }
-            Console.WriteLine("\nStudent Details Entered:");
-            Console.WriteLine("Name: " + name + " | Age: " + age + " | Date: " + date + " | Course ID: " + courseId);
+            
+        }
+
+        static void DeleteStudent()
+        {
+            
+            Console.Write("Enter Student ID to delete: ");
+            int deleteId = int.Parse(Console.ReadLine());
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "DELETE FROM student WHERE id=@id";
+                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@id", deleteId);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                        if (rowsAffected > 0)
+                        {
+                            Console.WriteLine("\n" + rowsAffected + " row(s) deleted successfully!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nNo student found with ID: " + deleteId);
+                        }
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Database Error: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("General Error: " + ex.Message);
+            }
         }
         static void Main(string[] args)
         {
@@ -69,10 +108,12 @@ namespace DAY_3_PRACTICE
                 switch (choice)
                 {
                     case "1":
-                        Console.WriteLine("Add Student selected!");
+                        
+                        AddStudent();
                         break;
                     case "2":
-                        Console.WriteLine("Delete Student selected!");
+                        
+                        DeleteStudent();
                         break;
                     case "3":
                         Console.WriteLine("Goodbye!");
