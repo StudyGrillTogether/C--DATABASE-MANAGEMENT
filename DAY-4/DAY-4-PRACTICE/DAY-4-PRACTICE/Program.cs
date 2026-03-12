@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 
 namespace DAY_4_PRACTICE
 {
@@ -83,8 +84,92 @@ namespace DAY_4_PRACTICE
             {
                 Console.WriteLine ("No such student with the age found");
             }
+            Console.WriteLine("=====using ANY()======");
 
+            bool hasAdults = students.Any(s => s.Age >= 18);
+            Console.WriteLine(hasAdults);
+
+            bool isInEnglish = students.Any(s => s.Course == "English");
+            Console.WriteLine(isInEnglish);
+
+            bool over25=students.Any(s => s.Age > 25);
+            if (over25)
+            {
+                Console.WriteLine("student over 25 is there");
+            }
+            else
+            {
+                Console.WriteLine("Student over 25 is not present");
+            }
+
+            Console.WriteLine("=====using Select======");
+            Console.WriteLine("=====FIRST WAY -EXTRACTING ONE PROPERTY======");
+            var names = students.Select(s => s.Name);
+            foreach(var name in names)
+            {
+                Console.WriteLine(name);
+            }
+            Console.WriteLine("=====SECOND WAY -Create a new string by combining properties:======");
+            var summaries = students.Select(s => $"{s.Name} is {s.Age} years old");
+            foreach(var summary in summaries)
+            {
+                Console.WriteLine(summary);
+            }
+            Console.WriteLine("=====third WAY Chain with Where():======");
+
+            var adultnames = students
+                .Where(s => s.Age > 18)
+                .Select(s => s.Name);
+            foreach (var adultname in adultnames) { Console.WriteLine(adultname); }
+            var summarie1s = students.Select(s => $"{s.Name} is {s.Course} has course");
+
+            var scienceCourse = students
+                .Where(s => s.Course == "Science")
+                .Select(s => s.Name);
+            foreach (var name in scienceCourse) { Console.WriteLine(name); }
+            // Get names of adult students sorted alphabetically:
+            var result1=students
+                .Where(s=>s.Age>18)
+                .OrderBy(s=>s.Name)
+                .Select (s => s.Name);
+            foreach (var name in result1)
+            {
+                Console.WriteLine(name);
+            }
+
+            //get the youngest math student
+
+            var result2 = students
+                .Where(s => s.Course == "Math")
+                .OrderBy(s => s.Age)
+                .FirstOrDefault();
+            if (result2 != null)
+                Console.WriteLine($"Youngest Math student: {result2.Name} - {result2.Age}");
+
+            //check if any underage sceince students exist
+
+            bool exists = students
+                .Where(s => s.Course == "Science")
+                .Any(s => s.Age < 18);
+            if (exists)
+                Console.WriteLine("There are underage Science students!");
+            else
+                Console.WriteLine("No underage Science students!");
+
+            //formatted summary of all students sorted by age
+
+            var result3 = students
+                .OrderBy(s => s.Age)
+                .Select(s => $"{s.Name}|age{s.Age}|course:{s.Course}");
+            foreach(var line in result3)
+            {
+                Console.WriteLine(line);
+            }
         }
+
+
+
+
     }
 
     
