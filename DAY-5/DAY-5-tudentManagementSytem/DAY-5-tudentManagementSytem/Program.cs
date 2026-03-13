@@ -214,7 +214,11 @@ namespace DAY_4_GIT_EXERCISE
             Console.WriteLine("2. View Students");
             Console.WriteLine("3. Update Student");
             Console.WriteLine("4. Delete Student");
-            Console.WriteLine("5. Exit");
+            Console.WriteLine("5.Search by Name");
+            Console.WriteLine("6.Filter By age");
+            Console.WriteLine("7.Sort By Name");
+            Console.WriteLine("8.Show Total Count");
+            Console.WriteLine("9. Exit");
             Console.Write("Choose an option: ");
         }
         class Student
@@ -353,43 +357,27 @@ namespace DAY_4_GIT_EXERCISE
             }
 
         }
+
+        static void SortByName(List<Student> students)
+        {
+            Console.WriteLine("=====Sorting By Name=====");
+            var student = students.OrderBy(s => s.Name);
+            foreach(var s in student)
+            {
+                Console.WriteLine($" ID: {s.Id} | Name: {s.Name} | Age: {s.Age} | Email: {s.email}");
+            }
+        }
+
+        static void ShowTotalCount(List<Student> students)
+        {
+            Console.WriteLine($"The Total count of students is :{students.Count}");
+            Console.WriteLine($"Students older than 20: {students.Where(s => s.Age > 20).Count()}");
+            Console.WriteLine($"Students younger than 18: {students.Where(s => s.Age < 18).Count()}");
+        }
         static void Main(string[] args)
         {
             List<Student> students = LoadStudents();
-            Console.WriteLine($"DATA LOADED OF STUDENTS:{students.Count}");
-
-
-
-            var adults = students.Where(s => s.Age > 20);
-            Console.WriteLine("=====sTUDENTS OLDER THAN 20 ARE");
-            foreach (var s in adults)
-            {
-
-                Console.WriteLine($"ID: {s.Id} | Name: {s.Name} | Age: {s.Age}");
-            }
-            var Sortemail = students.OrderBy(s => s.email);
-            Console.WriteLine("=====Sorting students by email");
-            foreach (var s in Sortemail)
-            {
-                Console.WriteLine($"ID: {s.Id} | Name: {s.Name} | Email:{s.email}");
-            }
-
-            Console.WriteLine("====Search By email=======");
-            Console.WriteLine("Enter email to search");
-            string searchEmail = Console.ReadLine();
-
-            var found = students.FirstOrDefault(s => s.email == searchEmail);
-            if (found != null)
-            {
-                Console.WriteLine($"Found! ID: {found.Id} | Name: {found.Name} | Age: {found.Age} | Email: {found.email}");
-            }
-            else
-            {
-                Console.WriteLine($"No student found with email: {searchEmail}");
-            }
-
-            Console.WriteLine("======Total Count of Students=====");
-            Console.WriteLine(students.Count);
+            Console.WriteLine($"DATA LOADED OF STUDENTS:{students.Count}");           
 
             while (true)
             {
@@ -402,21 +390,35 @@ namespace DAY_4_GIT_EXERCISE
                     case "1":
 
                         AddStudent();
+                        students=LoadStudents();
                         break;
                     case "2":
-
-                        ViewStudents();
+                        ViewStudents();                   
                         break;
                     case "3":
                         UpdateStudent();
+                        students = LoadStudents();
                         break;
                     case "4":
                         DeleteStudent();
+                        students = LoadStudents();
                         break;
+                    
                     case "5":
+                        SearchByName(students);
+                        break;
+                    case "6":
+                        FilterByAge(students);
+                        break;
+                    case "7":
+                        SortByName(students);
+                        break;
+                    case "8":
+                        ShowTotalCount(students);
+                        break;
+                    case "9":
                         Console.WriteLine("GOODBYE");
                         return;
-
                     default:
                         Console.WriteLine("Invalid option! Try again.");
                         break;
