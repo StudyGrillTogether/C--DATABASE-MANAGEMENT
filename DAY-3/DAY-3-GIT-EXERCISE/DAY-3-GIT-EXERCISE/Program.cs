@@ -32,6 +32,8 @@ namespace DAY_3_PRACTICE
                 return;
             }
 
+            
+
             try
             {
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
